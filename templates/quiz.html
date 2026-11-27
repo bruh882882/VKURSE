@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Подбор выплат — В КУРСЕ{% endblock %}
 {% block content %}
+{% set required_total = questions|rejectattr('required', 'equalto', false)|list|length %}
 <section class="container page-heading">
   <p class="eyebrow">ПОДБОР ВОЗМОЖНОСТЕЙ</p>
   <h1>Ответьте на вопросы</h1>
@@ -11,6 +12,10 @@
   {% if errors %}
   <div class="form-errors"><strong>Заполните обязательные вопросы:</strong><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>
   {% endif %}
+  <div class="quiz-progress" id="quiz-progress" data-total="{{ required_total }}">
+    <div class="quiz-progress-track"><span class="quiz-progress-fill" id="quiz-progress-fill"></span></div>
+    <p class="quiz-progress-text" id="quiz-progress-text" aria-live="polite">Заполнено обязательных вопросов: 0 из {{ required_total }}</p>
+  </div>
   <form action="{{ url_for('quiz_result') }}" method="post" class="quiz-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {% set current_group = namespace(name='') %}
@@ -21,16 +26,16 @@
           <div class="group-heading"><span>0{{ question.group_order }}</span><h2>{{ question.group }}</h2></div>
         {% set current_group.name = question.group %}
       {% endif %}
-      <fieldset class="question-block">
+      <fieldset class="question-block" data-key="{{ question.key }}" data-type="{{ question.type }}" data-required="{{ 'true' if question.required else 'false' }}">
         <legend>{{ loop.index }}. {{ question.title }}{% if not question.required %}<span class="optional-label">Необязательно</span>{% endif %}</legend>
         {% if question.hint %}<p class="question-hint">{{ question.hint }}</p>{% endif %}
         <div class="answer-options">
           {% for option in question.options %}
           <label class="answer-option">
             {% if question.type == 'multi' %}
-              <input type="checkbox" name="{{ question.key }}" value="{{ option.value }}">
+              <input type="checkbox" name="{{ question.key }}" value="{{ option.value }}" {% if option.value in answers.get(question.key, []) %}checked{% endif %}>
             {% else %}
-              <input type="radio" name="{{ question.key }}" value="{{ option.value }}" {% if question.required %}required{% endif %}>
+              <input type="radio" name="{{ question.key }}" value="{{ option.value }}" {% if question.required %}required{% endif %} {% if answers.get(question.key) == option.value %}checked{% endif %}>
             {% endif %}
             <span>{{ option.label }}</span>
           </label>

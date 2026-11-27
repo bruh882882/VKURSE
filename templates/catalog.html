@@ -29,7 +29,7 @@
     <button class="button button-primary" type="submit">Найти</button>
   </form>
 
-  <p class="result-count">Найдено записей: {{ programs|length }}</p>
+  <p class="result-count">Найдено записей: {{ programs|length }} из {{ total_count }}.{% if query or selected_kind != 'all' or selected_status != 'all' %} <a class="text-link" href="{{ url_for('catalog') }}">Сбросить фильтры ↗</a>{% endif %}</p>
 
   <div class="program-list">
     {% for item in programs %}

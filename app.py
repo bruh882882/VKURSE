@@ -142,30 +142,49 @@ def home():
     open_programs = [
         item for item in get_all_programs() if item.get("status") == "open"
     ]
-    return render_template("home.html", featured=open_programs[:3])
+    consultation_draft = session.pop("consultation_draft", {})
+    subscriber_draft = session.pop("subscriber_draft", "")
+    return render_template(
+        "home.html",
+        featured=open_programs[:3],
+        consultation_draft=consultation_draft,
+        subscriber_draft=subscriber_draft,
+    )
 
 
 @app.get("/catalog")
 def catalog():
     """Показывает базу и применяет поиск и фильтры."""
     programs = get_all_programs()
-    query = request.args.get("q", "").strip().lower()
+    raw_query = request.args.get("q", "").strip()
+    query_words = raw_query.lower().split()
     kind = request.args.get("kind", "all")
     status = request.args.get("status", "all")
 
+    if kind not in KIND_LABELS and kind != "all":
+        kind = "all"
+    if status not in STATUS_LABELS and status != "all":
+        status = "all"
+
     filtered_programs = []
     for program in programs:
-        # Ищем по названию, сумме, кому подходит и основным условиям.
+        # Ищем по всем основным полям карточки с поддержкой нескольких слов в любом порядке.
         searchable_text = " ".join(
             [
+                program.get("id", ""),
                 program.get("title", ""),
+                program.get("group", ""),
                 program.get("amount", ""),
                 program.get("eligibility", ""),
+                program.get("deadline", ""),
+                program.get("howToApply", ""),
+                program.get("docs", ""),
+                program.get("note", ""),
                 " ".join(program.get("conditions", [])),
             ]
         ).lower()
 
-        if query and query not in searchable_text:
+        if query_words and not all(word in searchable_text for word in query_words):
             continue
         if kind != "all" and program.get("kind") != kind:
             continue
@@ -191,17 +210,30 @@ def catalog():
     return render_template(
         "catalog.html",
         programs=filtered_programs,
-        query=query,
+        total_count=len(programs),
+        query=raw_query,
         selected_kind=kind,
         selected_status=status,
     )
+
+
+@app.get("/sources")
+def sources():
+    """Показывает сводный реестр проверенных первоисточников из sources.json."""
+    sources_dict = read_json("sources.json")
+    sources_list = [
+        {"key": key, **value} for key, value in sources_dict.items()
+    ]
+    return render_template("sources.html", sources=sources_list)
 
 
 @app.get("/quiz")
 def quiz():
     """Показывает вопросы для предварительного подбора программ."""
     questions = read_json("questions.json")
-    return render_template("quiz.html", questions=questions, errors=[])
+    return render_template(
+        "quiz.html", questions=questions, errors=[], answers={}
+    )
 
 
 @app.post("/quiz/result")
@@ -226,7 +258,7 @@ def quiz_result():
     for question in questions:
         key = question["key"]
         if question["type"] == "multi":
-            answer = request.form.getlist(key)
+            answer = [item.strip() for item in request.form.getlist(key) if item.strip()]
         else:
             answer = request.form.get(key, "").strip()
 
@@ -243,45 +275,58 @@ def quiz_result():
         answers[key] = answer
 
     if errors:
-        # Возвращаем форму с перечнем вопросов, которые нужно проверить.
+        # Возвращаем форму вместе с уже выбранными ответами, чтобы студент не заполнял анкету заново.
         return render_template(
-            "quiz.html", questions=questions, errors=list(dict.fromkeys(errors))
+            "quiz.html",
+            questions=questions,
+            errors=list(dict.fromkeys(errors)),
+            answers=answers,
         ), 400
 
     # Ответы используются только для расчёта и не записываются в базу.
-    recommendations = make_recommendations(
-        get_all_programs(), questions, answers
+    all_programs = get_all_programs()
+    recommendations = make_recommendations(all_programs, questions, answers)
+    manual_programs = [
+        item
+        for item in all_programs
+        if not item.get("match") and item.get("status") != "historical"
+    ]
+    return render_template(
+        "result.html",
+        programs=recommendations,
+        manual_programs=manual_programs,
     )
-    return render_template("result.html", programs=recommendations)
 
 
 @app.post("/subscribe")
 def subscribe():
     """Добавляет email в список желающих получать обновления."""
     if not check_csrf_token():
-        flash("Обновите страницу и попробуйте ещё раз.", "error")
+        flash("Обновите страницу и попробуйте ещё раз.", "subscribe_error")
         return redirect(url_for("home") + "#subscribe")
 
     email = request.form.get("email", "").strip().lower()
     consent = request.form.get("consent")
 
-    if not valid_email(email):
-        flash("Проверьте адрес электронной почты.", "error")
+    if not valid_email(email) or len(email) > 254:
+        session["subscriber_draft"] = email
+        flash("Проверьте адрес электронной почты.", "subscribe_error")
     elif consent != "yes":
-        flash("Подтвердите согласие на обработку адреса.", "error")
+        session["subscriber_draft"] = email
+        flash("Подтвердите согласие на обработку адреса.", "subscribe_error")
     else:
         added = save_subscriber(email)
         if not added:
-            flash("Этот адрес уже есть в списке подписчиков.", "info")
+            flash("Этот адрес уже есть в списке подписчиков.", "subscribe_info")
         else:
             sent = send_admin_notification(
                 "Новая подписка — В КУРСЕ",
                 f"Новый адрес подписчика: {email}",
             )
             if sent:
-                flash("Подписка сохранена. Команда получила уведомление.", "success")
+                flash("Подписка сохранена. Команда получила уведомление.", "subscribe_success")
             else:
-                flash("Подписка сохранена. Спасибо!", "success")
+                flash("Подписка сохранена. Спасибо!", "subscribe_success")
 
     return redirect(url_for("home") + "#subscribe")
 
@@ -290,7 +335,7 @@ def subscribe():
 def consultation():
     """Сохраняет вопрос студента и уведомляет команду, если настроена почта."""
     if not check_csrf_token():
-        flash("Обновите страницу и попробуйте ещё раз.", "error")
+        flash("Обновите страницу и попробуйте ещё раз.", "consultation_error")
         return redirect(url_for("home") + "#consultation")
 
     name = request.form.get("name", "").strip()
@@ -298,28 +343,37 @@ def consultation():
     message = request.form.get("message", "").strip()
     consent = request.form.get("consent")
 
+    draft = {"name": name, "email": email, "message": message}
+
     if len(name) < 2 or len(name) > 60:
-        flash("Укажите имя длиной от 2 до 60 символов.", "error")
-    elif not valid_email(email):
-        flash("Проверьте адрес электронной почты.", "error")
+        session["consultation_draft"] = draft
+        flash("Укажите имя длиной от 2 до 60 символов.", "consultation_error")
+    elif not valid_email(email) or len(email) > 254:
+        session["consultation_draft"] = draft
+        flash("Проверьте адрес электронной почты.", "consultation_error")
     elif len(message) < 10 or len(message) > 3000:
-        flash("Вопрос должен содержать от 10 до 3 000 символов.", "error")
+        session["consultation_draft"] = draft
+        flash("Вопрос должен содержать от 10 до 3 000 символов.", "consultation_error")
     elif consent != "yes":
-        flash("Подтвердите согласие на обработку данных обращения.", "error")
+        session["consultation_draft"] = draft
+        flash("Подтвердите согласие на обработку данных обращения.", "consultation_error")
     else:
-        save_consultation(name, email, message)
-        notification_text = (
-            f"Имя: {name}\n"
-            f"Почта: {email}\n\n"
-            f"Вопрос:\n{message}"
-        )
-        sent = send_admin_notification(
-            "Новое обращение — В КУРСЕ", notification_text
-        )
-        if sent:
-            flash("Обращение сохранено. Команда получила уведомление.", "success")
+        saved = save_consultation(name, email, message)
+        if not saved:
+            flash("Такое обращение уже было недавно отправлено.", "consultation_info")
         else:
-            flash("Обращение сохранено. Спасибо за обращение.", "success")
+            notification_text = (
+                f"Имя: {name}\n"
+                f"Почта: {email}\n\n"
+                f"Вопрос:\n{message}"
+            )
+            sent = send_admin_notification(
+                "Новое обращение — В КУРСЕ", notification_text
+            )
+            if sent:
+                flash("Обращение сохранено. Команда получила уведомление.", "consultation_success")
+            else:
+                flash("Обращение сохранено. Спасибо за обращение.", "consultation_success")
 
     return redirect(url_for("home") + "#consultation")
 

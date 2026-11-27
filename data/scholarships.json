@@ -60,7 +60,17 @@
             "bachelor",
             "specialty",
             "basic",
+            "master",
             "specialized"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
           ]
         }
       ]
@@ -127,6 +137,20 @@
             "bachelor",
             "specialty",
             "basic"
+          ]
+        },
+        {
+          "field": "ege",
+          "in": [
+            "270plus"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "no_session",
+            "excellent",
+            "good"
           ]
         }
       ]
@@ -490,6 +514,15 @@
           "in": [
             "budget"
           ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
+          ]
         }
       ]
     }
@@ -530,9 +563,24 @@
     "match": {
       "all": [
         {
+          "field": "mode",
+          "in": [
+            "full"
+          ]
+        },
+        {
           "field": "vuc",
           "in": [
             "yes"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
           ]
         }
       ]
@@ -575,6 +623,12 @@
     "match": {
       "all": [
         {
+          "field": "mode",
+          "in": [
+            "full"
+          ]
+        },
+        {
           "field": "level",
           "in": [
             "bachelor",
@@ -595,6 +649,14 @@
           "field": "fields",
           "in": [
             "moscow_priority"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_session"
           ]
         }
       ]
@@ -731,6 +793,15 @@
           "in": [
             "yes"
           ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
+          ]
         }
       ]
     }
@@ -795,6 +866,26 @@
             "under35"
           ]
         }
+      ],
+      "any": [
+        {
+          "field": "research",
+          "in": [
+            "yes"
+          ]
+        },
+        {
+          "field": "study_awards",
+          "in": [
+            "yes"
+          ]
+        },
+        {
+          "field": "project",
+          "in": [
+            "yes"
+          ]
+        }
       ]
     }
   },
@@ -852,6 +943,14 @@
             "third",
             "fourth",
             "master2"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory"
           ]
         }
       ]
@@ -966,6 +1065,15 @@
             "electronics",
             "space"
           ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
+          ]
         }
       ],
       "any": [
@@ -1046,6 +1154,15 @@
             "bachelor",
             "specialty",
             "master"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good",
+            "no_satisfactory",
+            "no_session"
           ]
         }
       ],
@@ -1160,7 +1277,36 @@
         "url": "https://mai.ru/science/studies/nirs/grant/",
         "date": "Текущая страница; проверена 26.11.2026"
       }
-    ]
+    ],
+    "match": {
+      "all": [
+        {
+          "field": "mode",
+          "in": [
+            "full"
+          ]
+        },
+        {
+          "field": "fields",
+          "in": [
+            "economics"
+          ]
+        },
+        {
+          "field": "grades",
+          "in": [
+            "excellent",
+            "good"
+          ]
+        },
+        {
+          "field": "research",
+          "in": [
+            "yes"
+          ]
+        }
+      ]
+    }
   },
   {
     "id": "S-19",

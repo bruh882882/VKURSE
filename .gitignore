@@ -1,6 +1,7 @@
 # Не публикуйте настройки почты, базу с адресами и временные файлы.
 .env
 instance/*.db
+instance/.secret_key
 __pycache__/
 *.pyc
 .venv/

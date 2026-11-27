@@ -162,6 +162,74 @@ h3 { margin: 10px 0 8px; font-size: 21px; }
 .footer-links a:hover, .footer-bottom a:hover { color: white; text-decoration: underline; }
 .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 15px; padding-bottom: 18px; border-top: 1px solid rgba(255,255,255,.14); color: #8fa7c2; font-size: 11px; }
 
+/* Липкая шапка, чтобы меню и активный пункт оставались под рукой. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Якоря форм не должны прятаться под липкой шапкой. */
+#subscribe, #consultation { scroll-margin-top: 96px; }
+
+/* Активный пункт меню. */
+.navigation a.is-active { color: var(--blue); }
+
+/* Всплывающие уведомления поверх контента: видны после перехода к форме. */
+.flash-list {
+  position: fixed;
+  top: 96px;
+  right: 18px;
+  z-index: 120;
+  width: min(360px, calc(100% - 36px));
+  padding-top: 0;
+  margin: 0;
+}
+.flash-list .flash { margin-bottom: 10px; box-shadow: var(--shadow); }
+
+/* Прогресс заполнения анкеты. */
+.quiz-progress {
+  position: sticky;
+  top: 88px;
+  z-index: 40;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: white;
+}
+.quiz-progress-track { height: 8px; border-radius: 999px; background: #e6edf5; overflow: hidden; }
+.quiz-progress-fill { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--blue); transition: width .25s ease; }
+.quiz-progress-text { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+
+/* Подсветка выбранного варианта ответа. */
+.answer-option:has(input:checked) { border-color: var(--blue); background: #eef5fd; color: var(--ink); }
+
+/* Подсветка незаполненного обязательного вопроса. */
+.question-block.is-invalid { padding: 23px; border: 1px solid #e5a1a1; border-radius: 10px; background: #fff5f5; }
+.question-block.is-invalid legend { color: #9b2c2c; }
+
+/* Страница источников. */
+.sources-section { padding-bottom: 90px; }
+.sources-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.sources-item { padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: white; }
+.sources-item a { font-weight: 700; }
+.sources-item p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+.sources-note { color: #76551b; font-size: 12px; }
+
+/* Выплаты с индивидуальными условиями на странице результата. */
+.manual-programs { margin-top: 28px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: #eef5fd; }
+.manual-programs h2 { margin-bottom: 8px; font-size: 21px; }
+.manual-programs .section-lead { margin-bottom: 14px; font-size: 14px; }
+.manual-program-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.manual-program-list li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #dbe8f5; }
+.manual-program-list li:last-child { border-bottom: 0; }
+.manual-program-list a { font-weight: 700; }
+.manual-program-list span { color: var(--muted); font-size: 13px; flex: 0 0 auto; }
+
 @media (max-width: 800px) {
   .hero { min-height: auto; grid-template-columns: 1fr; gap: 35px; padding-top: 52px; padding-bottom: 48px; }
   .hero-mark { width: 150px; justify-self: start; }
@@ -179,7 +247,7 @@ h3 { margin: 10px 0 8px; font-size: 21px; }
   .container { width: min(100% - 28px, 1120px); }
   .header-inner { min-height: 64px; }
   .menu-button { display: inline-flex; }
-  .navigation { display: none; position: absolute; z-index: 5; top: 64px; left: 0; right: 0; padding: 15px 22px; flex-direction: column; align-items: flex-start; gap: 15px; background: white; border-bottom: 1px solid var(--line); }
+  .navigation { display: none; position: absolute; z-index: 5; top: 100%; left: 0; right: 0; padding: 15px 22px; flex-direction: column; align-items: flex-start; gap: 15px; background: white; border-bottom: 1px solid var(--line); }
   .navigation.is-open { display: flex; }
   h1 { font-size: 39px; }
   .hero-lead, .section-lead { font-size: 15px; }
@@ -204,4 +272,11 @@ h3 { margin: 10px 0 8px; font-size: 21px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+@media (max-width: 600px) {
+  .flash-list { top: 76px; left: 12px; right: 12px; width: auto; }
+  .quiz-progress { top: 72px; }
+  #subscribe, #consultation { scroll-margin-top: 76px; }
+  .manual-program-list li { flex-direction: column; gap: 4px; }
 }

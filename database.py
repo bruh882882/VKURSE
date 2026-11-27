@@ -1,7 +1,7 @@
-"""Сохранение подписок и обращений в простую базу SQLite."""
+"""Сохранение и чтение подписок и обращений в простую базу SQLite."""
 
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -11,7 +11,7 @@ DATABASE_PATH = BASE_DIR / "instance" / "vkurse.db"
 def get_connection():
     """Открывает SQLite-файл и возвращает соединение с ним."""
     # Папка instance создаётся автоматически при первом запуске.
-    DATABASE_PATH.parent.mkdir(exist_ok=True)
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
     return connection
@@ -66,21 +66,81 @@ def save_subscriber(email):
 
 
 def save_consultation(name, email, message):
-    """Сохраняет обращение студента в отдельную таблицу."""
+    """Сохраняет обращение студента. Возвращает False при повторной отправке подряд."""
+    normalized_name = name.strip()
+    normalized_email = email.strip().lower()
+    normalized_message = message.strip()
+    now = datetime.now()
+    recent_cutoff = (now - timedelta(minutes=5)).isoformat(timespec="seconds")
+
     connection = get_connection()
     try:
+        duplicate = connection.execute(
+            """
+            SELECT id FROM consultations
+            WHERE email = ? AND message = ? AND created_at >= ?
+            LIMIT 1
+            """,
+            (normalized_email, normalized_message, recent_cutoff),
+        ).fetchone()
+        if duplicate is not None:
+            return False
+
         connection.execute(
             """
             INSERT INTO consultations (name, email, message, created_at)
             VALUES (?, ?, ?, ?)
             """,
             (
-                name.strip(),
-                email.strip().lower(),
-                message.strip(),
-                datetime.now().isoformat(timespec="seconds"),
+                normalized_name,
+                normalized_email,
+                normalized_message,
+                now.isoformat(timespec="seconds"),
             ),
         )
         connection.commit()
+        return True
     finally:
         connection.close()
+
+
+def get_subscribers():
+    """Возвращает список всех подписчиков от новых к старым."""
+    connection = get_connection()
+    try:
+        rows = connection.execute(
+            "SELECT id, email, created_at FROM subscribers ORDER BY id DESC"
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        connection.close()
+
+
+def get_consultations():
+    """Возвращает список всех обращений от новых к старым."""
+    connection = get_connection()
+    try:
+        rows = connection.execute(
+            """
+            SELECT id, name, email, message, created_at
+            FROM consultations
+            ORDER BY id DESC
+            """
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        connection.close()
+
+
+if __name__ == "__main__":
+    # Удобный просмотр заявок из терминала, если не настроен SMTP: python database.py
+    create_tables()
+    subscribers = get_subscribers()
+    consultations = get_consultations()
+    print(f"Подписчиков в базе: {len(subscribers)}")
+    for item in subscribers[:20]:
+        print(f"  [{item['created_at']}] {item['email']}")
+    print(f"\nОбращений в базе: {len(consultations)}")
+    for item in consultations[:20]:
+        print(f"  [{item['created_at']}] {item['name']} <{item['email']}>: {item['message']}")
+

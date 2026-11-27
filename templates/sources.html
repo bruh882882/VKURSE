@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Источники данных — В КУРСЕ{% endblock %}
+{% block content %}
+<section class="container page-heading">
+  <p class="eyebrow">ПРОВЕРОЧНАЯ БАЗА</p>
+  <h1>Источники данных</h1>
+  <p class="section-lead">Суммы и условия в карточках взяты из официальных приказов и страниц организаторов. Последняя общая проверка — 26.11.2026.</p>
+</section>
+<section class="container sources-section">
+  <ul class="sources-list">
+    {% for source in sources %}
+    <li class="sources-item">
+      <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }} ↗</a>
+      <p>{{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}</p>
+      {% if source.note %}<p class="sources-note">{{ source.note }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
