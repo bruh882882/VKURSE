@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Подбор выплат — В КУРСЕ{% endblock %}
+{% block content %}
+<section class="container page-heading">
+  <p class="eyebrow">ПОДБОР ВОЗМОЖНОСТЕЙ</p>
+  <h1>Ответьте на вопросы</h1>
+  <p class="section-lead">Тест предварительно подберёт программы по вашим ответам. Результаты не сохраняются.</p>
+</section>
+
+<section class="container quiz-section">
+  {% if errors %}
+  <div class="form-errors"><strong>Заполните обязательные вопросы:</strong><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  <form action="{{ url_for('quiz_result') }}" method="post" class="quiz-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {% set current_group = namespace(name='') %}
+    {% for question in questions %}
+      {% if question.group != current_group.name %}
+        {% if not loop.first %}</div>{% endif %}
+        <div class="question-group">
+          <div class="group-heading"><span>0{{ question.group_order }}</span><h2>{{ question.group }}</h2></div>
+        {% set current_group.name = question.group %}
+      {% endif %}
+      <fieldset class="question-block">
+        <legend>{{ loop.index }}. {{ question.title }}{% if not question.required %}<span class="optional-label">Необязательно</span>{% endif %}</legend>
+        {% if question.hint %}<p class="question-hint">{{ question.hint }}</p>{% endif %}
+        <div class="answer-options">
+          {% for option in question.options %}
+          <label class="answer-option">
+            {% if question.type == 'multi' %}
+              <input type="checkbox" name="{{ question.key }}" value="{{ option.value }}">
+            {% else %}
+              <input type="radio" name="{{ question.key }}" value="{{ option.value }}" {% if question.required %}required{% endif %}>
+            {% endif %}
+            <span>{{ option.label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    </div>
+    <div class="quiz-submit-row">
+      <p>Ответы используются только для подбора и не сохраняются в базе данных.</p>
+      <button class="button button-primary" type="submit">Показать результат</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

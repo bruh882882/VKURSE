@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Справочник стипендий, материальной помощи и конкурсов для студентов МАИ.">
+  <title>{% block title %}В КУРСЕ — поддержка студентов МАИ{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="{{ url_for('home') }}">В КУРСЕ<span>.</span></a>
+      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false">Меню</button>
+      <nav class="navigation" aria-label="Основная навигация">
+        <a href="{{ url_for('catalog') }}">Справочник</a>
+        <a href="{{ url_for('quiz') }}">Подбор</a>
+        <a href="{{ url_for('home') }}#subscribe">Рассылка</a>
+        <a href="{{ url_for('home') }}#consultation">Консультация</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container flash-list" aria-live="polite">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-top">
+      <div>
+        <a class="logo logo-light" href="{{ url_for('home') }}">В КУРСЕ<span>.</span></a>
+        <p>Независимый студенческий справочник.</p>
+        <p class="footer-note">Не является официальным ресурсом МАИ.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://mai.ru/education/studies/scholarship/" target="_blank" rel="noopener noreferrer">Стипендии МАИ ↗</a>
+        <a href="https://mai.ru/sveden/grants/" target="_blank" rel="noopener noreferrer">Меры поддержки МАИ ↗</a>
+        <a href="https://mai.ru/science/studies/nirs/grant/" target="_blank" rel="noopener noreferrer">Стипендии за НИРС ↗</a>
+        <a href="https://mai.ru/campus/360/welfare/" target="_blank" rel="noopener noreferrer">Материальная поддержка ↗</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>Данные обновлены 26.11.2026</span>
+      <a href="{{ url_for('catalog') }}">Открыть справочник</a>
+    </div>
+  </footer>
+</body>
+</html>

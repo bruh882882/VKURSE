@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — В КУРСЕ{% endblock %}
+{% block content %}
+<section class="container message-page">
+  <p class="eyebrow">В КУРСЕ</p>
+  <h1>{{ title }}</h1>
+  <p class="section-lead">{{ message }}</p>
+  <a class="button button-primary" href="{{ back_url }}">Вернуться</a>
+</section>
+{% endblock %}

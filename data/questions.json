@@ -1,0 +1,402 @@
+[
+  {
+    "key": "level",
+    "title": "На какой программе вы учитесь?",
+    "type": "single",
+    "options": [
+      {
+        "value": "bachelor",
+        "label": "Бакалавриат"
+      },
+      {
+        "value": "specialty",
+        "label": "Специалитет"
+      },
+      {
+        "value": "basic",
+        "label": "Базовое высшее образование"
+      },
+      {
+        "value": "master",
+        "label": "Магистратура"
+      },
+      {
+        "value": "specialized",
+        "label": "Специализированное высшее образование"
+      },
+      {
+        "value": "postgraduate",
+        "label": "Аспирантура"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "mode",
+    "title": "Какая у вас форма обучения?",
+    "type": "single",
+    "options": [
+      {
+        "value": "full",
+        "label": "Очная"
+      },
+      {
+        "value": "part",
+        "label": "Очно-заочная / заочная"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "funding",
+    "title": "На какой основе вы обучаетесь?",
+    "type": "single",
+    "options": [
+      {
+        "value": "budget",
+        "label": "Бюджет"
+      },
+      {
+        "value": "paid",
+        "label": "Платное обучение"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "course",
+    "title": "Какой у вас курс?",
+    "type": "single",
+    "options": [
+      {
+        "value": "first",
+        "label": "1 курс"
+      },
+      {
+        "value": "second",
+        "label": "2 курс"
+      },
+      {
+        "value": "third",
+        "label": "3 курс"
+      },
+      {
+        "value": "fourth",
+        "label": "4 курс и выше"
+      },
+      {
+        "value": "master1",
+        "label": "1 курс магистратуры / специализированного высшего"
+      },
+      {
+        "value": "master2",
+        "label": "2 курс магистратуры"
+      },
+      {
+        "value": "postgraduate",
+        "label": "Аспирантура"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "citizenship",
+    "title": "Какой у вас статус гражданства?",
+    "type": "single",
+    "options": [
+      {
+        "value": "russian",
+        "label": "Гражданин РФ"
+      },
+      {
+        "value": "foreign_quota",
+        "label": "Иностранный гражданин, поступивший по квоте РФ"
+      },
+      {
+        "value": "foreign_other",
+        "label": "Другой статус"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "grades",
+    "title": "Как прошла последняя сессия?",
+    "type": "single",
+    "options": [
+      {
+        "value": "excellent",
+        "label": "Только «отлично»"
+      },
+      {
+        "value": "good",
+        "label": "«Хорошо» и «отлично»"
+      },
+      {
+        "value": "no_satisfactory",
+        "label": "Нет «удовлетворительно», но есть другие оценки"
+      },
+      {
+        "value": "satisfactory",
+        "label": "Есть «удовлетворительно» или долг"
+      },
+      {
+        "value": "no_session",
+        "label": "Пока не было сессии"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "ege",
+    "title": "Если вы первокурсник: сколько баллов ЕГЭ/вступительных с индивидуальными достижениями?",
+    "type": "single",
+    "options": [
+      {
+        "value": "under200",
+        "label": "До 199"
+      },
+      {
+        "value": "200_249",
+        "label": "200–249"
+      },
+      {
+        "value": "250_269",
+        "label": "250–269"
+      },
+      {
+        "value": "270plus",
+        "label": "270 и выше / поступление без экзаменов по олимпиаде"
+      },
+      {
+        "value": "not_first",
+        "label": "Я не первокурсник / не применимо"
+      }
+    ],
+    "group": "Учёба",
+    "group_order": 1,
+    "required": true
+  },
+  {
+    "key": "research",
+    "title": "Есть ли у вас научные достижения?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да: публикации, доклады, патенты, гранты или НИР"
+      },
+      {
+        "value": "no",
+        "label": "Пока нет"
+      }
+    ],
+    "group": "Достижения",
+    "group_order": 2,
+    "required": true
+  },
+  {
+    "key": "study_awards",
+    "title": "Есть ли учебные достижения?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да: олимпиады, конкурсы, победы или призовые места"
+      },
+      {
+        "value": "no",
+        "label": "Пока нет"
+      }
+    ],
+    "group": "Достижения",
+    "group_order": 2,
+    "required": true
+  },
+  {
+    "key": "public",
+    "title": "Участвуете ли вы в общественной или культурно-творческой деятельности?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да, есть подтверждённые достижения"
+      },
+      {
+        "value": "no",
+        "label": "Нет / пока нет"
+      }
+    ],
+    "group": "Достижения",
+    "group_order": 2,
+    "required": true
+  },
+  {
+    "key": "sport",
+    "title": "Есть ли спортивные достижения?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да, есть подтверждённые достижения"
+      },
+      {
+        "value": "no",
+        "label": "Нет / пока нет"
+      }
+    ],
+    "group": "Достижения",
+    "group_order": 2,
+    "required": true
+  },
+  {
+    "key": "fields",
+    "title": "Какие направления связаны с вашей специальностью или достижениями? Можно выбрать несколько.",
+    "type": "multi",
+    "options": [
+      {
+        "value": "engineering",
+        "label": "Инженерия и технические решения"
+      },
+      {
+        "value": "opk",
+        "label": "Специальность для ОПК"
+      },
+      {
+        "value": "electronics",
+        "label": "Электронная промышленность"
+      },
+      {
+        "value": "space",
+        "label": "Авиация и космонавтика"
+      },
+      {
+        "value": "moscow_priority",
+        "label": "Направление из перечня Правительства Москвы"
+      },
+      {
+        "value": "economics",
+        "label": "Экономика и управление"
+      },
+      {
+        "value": "other",
+        "label": "Другое"
+      }
+    ],
+    "group": "Достижения",
+    "group_order": 2,
+    "required": true
+  },
+  {
+    "key": "project",
+    "title": "Есть ли у вас собственный инновационный или технологический проект?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да, есть идея/проект"
+      },
+      {
+        "value": "no",
+        "label": "Нет"
+      }
+    ],
+    "group": "Проекты",
+    "group_order": 3,
+    "required": true
+  },
+  {
+    "key": "social_docs",
+    "title": "Есть ли у вас документально подтверждённое основание для социальной поддержки?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да"
+      },
+      {
+        "value": "no",
+        "label": "Нет"
+      },
+      {
+        "value": "skip",
+        "label": "Не хочу отвечать"
+      }
+    ],
+    "hint": "Необязательный вопрос. Ответ используется только для подбора в этом окне и не сохраняется.",
+    "group": "Дополнительные возможности",
+    "group_order": 4,
+    "required": false
+  },
+  {
+    "key": "apo_category",
+    "title": "Относитесь ли вы к одной из категорий программы АПОС?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да, есть подтверждающие документы"
+      },
+      {
+        "value": "no",
+        "label": "Нет"
+      },
+      {
+        "value": "unsure",
+        "label": "Не уверен(а)"
+      }
+    ],
+    "hint": "Категории перечислены в карточке АПОС. Не указывайте диагнозы или подробности личной ситуации.",
+    "group": "Дополнительные возможности",
+    "group_order": 4,
+    "required": true
+  },
+  {
+    "key": "vuc",
+    "title": "Вы обучаетесь в военном учебном центре МАИ и заключили соответствующий договор?",
+    "type": "single",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Да"
+      },
+      {
+        "value": "no",
+        "label": "Нет"
+      }
+    ],
+    "group": "Дополнительные возможности",
+    "group_order": 4,
+    "required": true
+  },
+  {
+    "key": "age",
+    "title": "Вам меньше 35 лет?",
+    "type": "single",
+    "options": [
+      {
+        "value": "under35",
+        "label": "Да"
+      },
+      {
+        "value": "35plus",
+        "label": "Нет"
+      }
+    ],
+    "group": "Дополнительные возможности",
+    "group_order": 4,
+    "required": true
+  }
+]
