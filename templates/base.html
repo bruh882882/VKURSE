@@ -16,13 +16,6 @@
   <header class="header">
     <div class="container header-inner">
       <a class="logo" href="{{ url_for('home') }}">В КУРСЕ<span>.</span></a>
-      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false">Меню</button>
-      <nav class="navigation" aria-label="Основная навигация">
-        <a href="{{ url_for('catalog') }}" {% if request.endpoint == 'catalog' %}class="is-active" aria-current="page"{% endif %}>Справочник</a>
-        <a href="{{ url_for('quiz') }}" {% if request.endpoint in ['quiz', 'quiz_result'] %}class="is-active" aria-current="page"{% endif %}>Подбор</a>
-        <a href="{{ url_for('home') }}#subscribe">Рассылка</a>
-        <a href="{{ url_for('home') }}#consultation">Консультация</a>
-      </nav>
     </div>
   </header>
 
@@ -56,7 +49,6 @@
     </div>
     <div class="container footer-bottom">
       <span>Данные обновлены 26.11.2026</span>
-      <a href="{{ url_for('catalog') }}">Открыть справочник</a>
     </div>
   </footer>
 </body>
