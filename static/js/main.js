@@ -1,37 +1,8 @@
-// Мобильное меню, автоподача фильтров и интерактивность анкеты.
+// Автоподача фильтров и интерактивность анкеты.
 // Вся основная логика сайта выполняется на сервере Flask, поэтому JS остаётся минимальным.
 
 (function () {
-  // 1) Мобильное меню: открытие, закрытие по пункту, Escape и клику вне меню.
-  const menuButton = document.querySelector('.menu-button');
-  const navigation = document.querySelector('.navigation');
-
-  function closeMenu() {
-    if (!navigation) return;
-    navigation.classList.remove('is-open');
-    if (menuButton) menuButton.setAttribute('aria-expanded', 'false');
-  }
-
-  if (menuButton && navigation) {
-    menuButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const isOpen = navigation.classList.toggle('is-open');
-      menuButton.setAttribute('aria-expanded', String(isOpen));
-      menuButton.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
-    });
-
-    navigation.addEventListener('click', (event) => {
-      if (event.target.closest('a')) closeMenu();
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') closeMenu();
-    });
-
-    document.addEventListener('click', closeMenu);
-  }
-
-  // 2) Автоподача формы фильтров при смене категории или статуса.
+  // 1) Автоподача формы фильтров при смене категории или статуса.
   const filterForm = document.querySelector('.filters');
   if (filterForm) {
     filterForm.querySelectorAll('select').forEach((select) => {
@@ -39,7 +10,7 @@
     });
   }
 
-  // 3) Анкета: прогресс заполнения, связь вопросов о курсе и баллах ЕГЭ, проверка чекбоксов.
+  // 2) Анкета: прогресс заполнения, связь вопросов о курсе и баллах ЕГЭ, проверка чекбоксов.
   const quizForm = document.querySelector('.quiz-form');
   if (quizForm) {
     const progress = document.getElementById('quiz-progress');

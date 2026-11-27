@@ -28,7 +28,7 @@ button, input, select, textarea { font: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 .header { background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line); }
-.header-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.header-inner { min-height: 76px; display: flex; align-items: center; justify-content: center; gap: 24px; }
 .logo { color: var(--ink); font-family: "Nunito", Arial, sans-serif; font-size: 25px; font-weight: 800; letter-spacing: -.8px; }
 .logo span { color: var(--blue); }
 .navigation { display: flex; align-items: center; gap: 28px; }
@@ -36,7 +36,7 @@ button, input, select, textarea { font: inherit; }
 .navigation a:hover { color: var(--blue); }
 .menu-button { display: none; border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; background: white; color: var(--ink); }
 
-.hero { min-height: 460px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr); align-items: center; gap: 48px; padding-top: 64px; padding-bottom: 64px; }
+.hero { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-top: 56px; padding-bottom: 56px; }
 .eyebrow { margin: 0 0 14px; color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: 1.6px; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { font-family: "Nunito", Arial, sans-serif; line-height: 1.12; }
@@ -231,7 +231,7 @@ h3 { margin: 10px 0 8px; font-size: 21px; }
 .manual-program-list span { color: var(--muted); font-size: 13px; flex: 0 0 auto; }
 
 @media (max-width: 800px) {
-  .hero { min-height: auto; grid-template-columns: 1fr; gap: 35px; padding-top: 52px; padding-bottom: 48px; }
+  .hero { min-height: auto; padding-top: 48px; padding-bottom: 40px; }
   .hero-mark { width: 150px; justify-self: start; }
   .hero-mark span { font-size: 60px; }
   .quick-section { grid-template-columns: repeat(2, 1fr); margin-bottom: 58px; }
